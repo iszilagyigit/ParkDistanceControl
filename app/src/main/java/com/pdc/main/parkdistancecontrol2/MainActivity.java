@@ -1,9 +1,11 @@
 package com.pdc.main.parkdistancecontrol2;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
     // Used to load the 'native-lib' library on application startup.
@@ -12,6 +14,7 @@ public class MainActivity extends AppCompatActivity {
         // see https://developer.android.com/studio/projects/configure-cmake?hl=de
       //  System.loadLibrary("native-lib");
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +28,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
        // --> findViewById(R.id.button1_3).setVisibility(View.INVISIBLE);
         super.onStart();
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(
+                new ParkSensorBroadcastReceiver(findViewById(R.id.sensor1)),
+                new IntentFilter(ParkSensorBackgroundService.PARK_SENSOR_INTENT_NAME));
+        Intent serviceIntent = new Intent();
+        ParkSensorBackgroundService.enqueueWork(getApplicationContext(), serviceIntent);
     }
+
 
     /**
      * A native method that is implemented by the 'native-lib' native library,
