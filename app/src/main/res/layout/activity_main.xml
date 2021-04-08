@@ -31,8 +31,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="39dp"
                 android:layout_marginBottom="3dp"
-                android:foreground="#27AE60"
-                android:text="" />
+                android:background="#27AE60"
+                android:text="--- cm"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textColorHint="#FFFFFF" />
 
             <Button
                 android:id="@+id/button1_2"
@@ -104,8 +107,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="39dp"
                 android:layout_marginBottom="3dp"
-                android:foreground="#27AE60"
-                android:text="" />
+                android:background="#27AE60"
+                android:text="--- cm"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textColorHint="#FFFFFF" />
 
             <Button
                 android:id="@+id/button2_2"
@@ -176,8 +182,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="39dp"
                 android:layout_marginBottom="3dp"
-                android:foreground="#27AE60"
-                android:text="" />
+                android:background="#27AE60"
+                android:text="--- cm"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textColorHint="#FFFFFF" />
 
             <Button
                 android:id="@+id/button3_2"
@@ -248,8 +257,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="39dp"
                 android:layout_marginBottom="3dp"
-                android:foreground="#27AE60"
-                android:text="" />
+                android:background="#27AE60"
+                android:text="--- cm"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textColorHint="#FFFFFF" />
 
             <Button
                 android:id="@+id/button4_2"

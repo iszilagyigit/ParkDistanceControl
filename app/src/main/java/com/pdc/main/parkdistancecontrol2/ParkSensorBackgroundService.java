@@ -30,13 +30,13 @@ public class ParkSensorBackgroundService extends JobIntentService {
 
         for (int i = 0; i < 100; i++) {
             try {
-                Thread.sleep(500);
+                Thread.sleep(1000);
                 Intent measureIntent = new Intent(PARK_SENSOR_INTENT_NAME);
                 // TODO read values from RPI SPI
-                measureIntent.putExtra(PARK_SENSOR_1_KEY, i + 10);
-                measureIntent.putExtra(PARK_SENSOR_2_KEY, 34);
-                measureIntent.putExtra(PARK_SENSOR_3_KEY, 23);
-                measureIntent.putExtra(PARK_SENSOR_4_KEY, 27);
+                measureIntent.putExtra(PARK_SENSOR_1_KEY, 500 - i * 10);
+                measureIntent.putExtra(PARK_SENSOR_2_KEY, 498 - i * 10);
+                measureIntent.putExtra(PARK_SENSOR_3_KEY, 497 - i * 10);
+                measureIntent.putExtra(PARK_SENSOR_4_KEY, 496 - i * 10);
                 LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(measureIntent);
             } catch (InterruptedException e) {
                 Log.e("BackgroundService", "Interrupted", e);

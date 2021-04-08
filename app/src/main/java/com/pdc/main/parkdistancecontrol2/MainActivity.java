@@ -29,7 +29,12 @@ public class MainActivity extends AppCompatActivity {
        // --> findViewById(R.id.button1_3).setVisibility(View.INVISIBLE);
         super.onStart();
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(
-                new ParkSensorBroadcastReceiver(findViewById(R.id.sensor1)),
+                new ParkSensorBroadcastReceiver(
+                        findViewById(R.id.sensor1),
+                        findViewById(R.id.sensor2),
+                        findViewById(R.id.sensor3),
+                        findViewById(R.id.sensor4)
+                ),
                 new IntentFilter(ParkSensorBackgroundService.PARK_SENSOR_INTENT_NAME));
         Intent serviceIntent = new Intent();
         ParkSensorBackgroundService.enqueueWork(getApplicationContext(), serviceIntent);
