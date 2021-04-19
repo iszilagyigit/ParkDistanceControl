@@ -16,6 +16,14 @@ public class ParkSensorBackgroundService extends JobIntentService {
     public static final String PARK_SENSOR_3_KEY = "sensor3";
     public static final String PARK_SENSOR_4_KEY = "sensor4";
 
+    // Used to load the 'pdc2' library on application startup.
+    static {
+        // TODO activate after compiled library is copied to rpi3
+        // see https://developer.android.com/studio/projects/configure-cmake?hl=de
+        System.loadLibrary("pdc2");
+    }
+
+    private native String stringFromJNI();
     /**
      * Convenience method for enqueuing work in to this service.
      */
@@ -30,6 +38,7 @@ public class ParkSensorBackgroundService extends JobIntentService {
 
         for (int i = 0; i < 100; i++) {
             try {
+                Log.i("BackgroundService", " -> " + stringFromJNI());
                 Thread.sleep(1000);
                 Intent measureIntent = new Intent(PARK_SENSOR_INTENT_NAME);
                 // TODO read values from RPI SPI

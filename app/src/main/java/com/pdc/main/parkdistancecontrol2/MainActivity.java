@@ -8,13 +8,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 
 public class MainActivity extends AppCompatActivity {
-    // Used to load the 'native-lib' library on application startup.
-    static {
-      // TODO activate after compiled library is copied to rpi3
-        // see https://developer.android.com/studio/projects/configure-cmake?hl=de
-      //  System.loadLibrary("native-lib");
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

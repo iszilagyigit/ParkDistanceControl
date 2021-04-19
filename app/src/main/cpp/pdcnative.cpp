@@ -6,7 +6,7 @@
 
 extern "C"
 JNIEXPORT jstring JNICALL
-Java_com_pdc_main_MainActivity_stringFromJNI(
+Java_com_pdc_main_parkdistancecontrol2.ParkSensorBackgroundService_stringFromJNI(
         JNIEnv *env,
         jobject /* this */) {
     std::string hello = "Hello from C++";
