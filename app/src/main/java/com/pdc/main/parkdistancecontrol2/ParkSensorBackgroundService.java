@@ -23,22 +23,29 @@ public class ParkSensorBackgroundService extends JobIntentService {
         System.loadLibrary("pdc2");
     }
 
+    private static int spiFileHandler = -1;
+
+    private native static int initSPIDevice();
     private native String stringFromJNI();
     /**
      * Convenience method for enqueuing work in to this service.
      */
     static void enqueueWork(Context context, Intent work) {
         enqueueWork(context, ParkSensorBackgroundService.class, JOB_ID, work);
+        if (spiFileHandler == -1) {
+            spiFileHandler = initSPIDevice();
+        }
     }
 
 
     @Override
     protected void onHandleWork(@NonNull Intent intent) {
+        Log.i("BackgroundService", " -> " + stringFromJNI());
+        Log.i("BackgroundService", "------> SPI Handler: " + ParkSensorBackgroundService.spiFileHandler);
         Log.i("BackgroundService", "------> Executing work: " + intent);
 
         for (int i = 0; i < 100; i++) {
             try {
-                Log.i("BackgroundService", " -> " + stringFromJNI());
                 Thread.sleep(1000);
                 Intent measureIntent = new Intent(PARK_SENSOR_INTENT_NAME);
                 // TODO read values from RPI SPI
