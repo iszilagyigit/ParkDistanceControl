@@ -20,7 +20,7 @@ public class ParkSensorBackgroundService extends JobIntentService {
     static {
         // TODO activate after compiled library is copied to rpi3
         // see https://developer.android.com/studio/projects/configure-cmake?hl=de
-        // System.loadLibrary("pdc2");
+        System.loadLibrary("pdc2");
     }
 
     private native String stringFromJNI();
@@ -38,7 +38,7 @@ public class ParkSensorBackgroundService extends JobIntentService {
 
         for (int i = 0; i < 100; i++) {
             try {
-             //   Log.i("BackgroundService", " -> " + stringFromJNI());
+                Log.i("BackgroundService", " -> " + stringFromJNI());
                 Thread.sleep(1000);
                 Intent measureIntent = new Intent(PARK_SENSOR_INTENT_NAME);
                 // TODO read values from RPI SPI
