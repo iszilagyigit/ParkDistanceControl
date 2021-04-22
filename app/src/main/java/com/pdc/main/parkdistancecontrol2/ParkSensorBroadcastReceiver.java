@@ -98,5 +98,4 @@ public class ParkSensorBroadcastReceiver extends BroadcastReceiver {
             viewButtons[i].setVisibility(nrOfBars <= i ? View.INVISIBLE : View.VISIBLE);
         }
       }
-
 }

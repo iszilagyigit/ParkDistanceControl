@@ -16,7 +16,7 @@ static uint8_t bits = 8;
 static uint32_t speed = 500000;
 static uint32_t mode;
 
-static void transfer(int fd, uint8_t const *tx, uint8_t const *rx, size_t len)
+static void transfer(int fd, uint8_t const *tx, uint32_t *rx, size_t len)
 {
     int ret;
     struct spi_ioc_transfer tr = {
@@ -113,10 +113,25 @@ Java_com_pdc_main_parkdistancecontrol2_ParkSensorBackgroundService_sendFirstByte
 
        uint8_t anyValue = 0xFF;
        uint8_t recBuf = 0;
-       transfer(fd, &anyValue, &recBuf, 1);
+       transfer(fd, &anyValue, reinterpret_cast<uint32_t *>(&recBuf), 1);
        return recBuf;
 }
 
+extern "C"
+JNIEXPORT jlong JNICALL
+Java_com_pdc_main_parkdistancecontrol2_ParkSensorBackgroundService_parkSensorSpi4Bytes(
+        JNIEnv *env,
+        jobject /* this */,
+        jint fd) {
+
+    __android_log_print(ANDROID_LOG_INFO, "SPI", "spi dev handler param: %d\n", fd);
+
+    uint32_t anyValue = 0x01020304;
+    uint32_t recBuf = 0x00000000;
+    transfer(fd, reinterpret_cast<const uint8_t *>(&anyValue),
+             (uint32_t *) reinterpret_cast<const uint8_t *> (&recBuf), 4);
+    return recBuf;
+}
 
 extern "C"
 JNIEXPORT jstring JNICALL
