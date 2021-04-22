@@ -77,8 +77,8 @@ void setup() {
   digitalWrite(D2, HIGH);
   checkSensors(0, sensor1, S1_VCC_Pin);
   checkSensors(1, sensor2, S2_VCC_Pin);
-  checkSensors(2, sensor3, S2_VCC_Pin);
-  checkSensors(3, sensor4, S2_VCC_Pin);
+  checkSensors(2, sensor3, S3_VCC_Pin);
+  checkSensors(3, sensor4, S4_VCC_Pin);
   digitalWrite(D2, LOW);
 
   for (byte i = 1; i<=5; i++) {
@@ -106,10 +106,10 @@ void loop() {
     lastMeasure[1] = measure(sensor2, S2_VCC_Pin);
    }      
    if (sensorOnline[2]) {
-    lastMeasure[2] = measure(sensor3, S2_VCC_Pin);
+    lastMeasure[2] = measure(sensor3, S3_VCC_Pin);
    }      
    if (sensorOnline[3]) {
-    lastMeasure[3] = measure(sensor4, S2_VCC_Pin);
+    lastMeasure[3] = measure(sensor4, S4_VCC_Pin);
    }
    digitalWrite(D2, LOW);
    
