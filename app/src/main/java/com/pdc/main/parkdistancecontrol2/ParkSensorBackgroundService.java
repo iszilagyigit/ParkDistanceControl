@@ -26,6 +26,8 @@ public class ParkSensorBackgroundService extends JobIntentService {
     private static int spiFileHandler = -1;
 
     private native static int initSPIDevice();
+    private native static byte sendFirstByte(int pSpiFileHandler);
+
     private native String stringFromJNI();
     /**
      * Convenience method for enqueuing work in to this service.
@@ -35,12 +37,18 @@ public class ParkSensorBackgroundService extends JobIntentService {
         if (spiFileHandler == -1) {
             spiFileHandler = initSPIDevice();
         }
+        if (spiFileHandler != -1) {
+            Log.i("BackgroundService", "Initialized. " + spiFileHandler);
+            byte spiResponse = sendFirstByte(spiFileHandler);
+            Log.i("BackgroundService", "Init byte response: " + spiResponse);
+
+        }
     }
 
 
     @Override
     protected void onHandleWork(@NonNull Intent intent) {
-        Log.i("BackgroundService", " -> " + stringFromJNI());
+        Log.i("BackgroundService", "------> " + stringFromJNI());
         Log.i("BackgroundService", "------> SPI Handler: " + ParkSensorBackgroundService.spiFileHandler);
         Log.i("BackgroundService", "------> Executing work: " + intent);
 
