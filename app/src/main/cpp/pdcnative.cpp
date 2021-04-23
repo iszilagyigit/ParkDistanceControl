@@ -12,7 +12,6 @@
 
 
 static const char *device = "/dev/spidev0.0";
-static uint8_t bits = 8;
 static uint32_t speed = 500000;
 static uint32_t mode;
 
@@ -24,10 +23,11 @@ static void transfer(int fd, uint8_t const *tx, uint32_t *rx, size_t len)
             .rx_buf = (unsigned long)rx,
             .len = (unsigned int) len,
             .speed_hz = speed,
-            .bits_per_word = bits,
+            .bits_per_word = 8,
+            .tx_nbits = 8,
+            .rx_nbits = 8,
+
     };
-    tr.tx_nbits = 8;
-    tr.rx_nbits = 8;
 
     ret = ioctl(fd, SPI_IOC_MESSAGE(1), &tr);
     if (ret < 1) {
@@ -66,20 +66,6 @@ Java_com_pdc_main_parkdistancecontrol2_ParkSensorBackgroundService_initSPIDevice
     }
 
     /*
-     * bits per word
-     */
-    ret = ioctl(fd, SPI_IOC_WR_BITS_PER_WORD, &bits);
-    if (ret == -1) {
-        __android_log_write(ANDROID_LOG_ERROR,"SPI","can't set bits per word");
-        return -1;
-    }
-    ret = ioctl(fd, SPI_IOC_RD_BITS_PER_WORD, &bits);
-    if (ret == -1) {
-        __android_log_write(ANDROID_LOG_ERROR,"SPI","can't get bits per word");
-        return -1;
-    }
-
-    /*
      * max speed hz
      */
     ret = ioctl(fd, SPI_IOC_WR_MAX_SPEED_HZ, &speed);
@@ -96,7 +82,6 @@ Java_com_pdc_main_parkdistancecontrol2_ParkSensorBackgroundService_initSPIDevice
 
     __android_log_print(ANDROID_LOG_INFO, "SPI", "spi file handler: %d\n", fd);
     __android_log_print(ANDROID_LOG_INFO, "SPI", "spi mode: 0x%x\n", mode);
-    __android_log_print(ANDROID_LOG_INFO, "SPI","bits per word: %u\n", bits);
     __android_log_print(ANDROID_LOG_INFO, "SPI","max speed: %u Hz (%u kHz)\n", speed, speed/1000);
 
     return fd;
@@ -111,7 +96,7 @@ Java_com_pdc_main_parkdistancecontrol2_ParkSensorBackgroundService_sendFirstByte
 
        __android_log_print(ANDROID_LOG_INFO, "SPI", "spi dev handler param: %d\n", fd);
 
-       uint8_t anyValue = 0xFF;
+       uint8_t anyValue = 0x02;
        uint8_t recBuf = 0;
        transfer(fd, &anyValue, reinterpret_cast<uint32_t *>(&recBuf), 1);
        return recBuf;

@@ -71,7 +71,7 @@ https://source.android.com/security/selinux/device-policy
 
         for (int i = 0; i < 1000; i++) {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(1500);
                 Intent measureIntent = new Intent(PARK_SENSOR_INTENT_NAME);
 
                 if (spiFileHandler != -1) {
