@@ -7,19 +7,19 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 
+/**
+ * MainActivity for the Application.
+ */
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-         setContentView(R.layout.activity_main);
-        // System.out.println("String from JNI: " + stringFromJNI());
+        setContentView(R.layout.activity_main);
     }
 
     @Override
     protected void onStart() {
-       // --> findViewById(R.id.button1_3).setVisibility(View.INVISIBLE);
         super.onStart();
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(
                 new ParkSensorBroadcastReceiver(
@@ -32,12 +32,4 @@ public class MainActivity extends AppCompatActivity {
         Intent serviceIntent = new Intent();
         ParkSensorBackgroundService.enqueueWork(getApplicationContext(), serviceIntent);
     }
-
-
-    /**
-     * A native method that is implemented by the 'native-lib' native library,
-     * which is packaged with this application.
-     */
-    public native String stringFromJNI();
-
 }

@@ -3,29 +3,30 @@ package com.pdc.main.parkdistancecontrol2;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+/**
+ * Receives Intents from {@link ParkSensorBackgroundService} and update the GUI.
+ */
 public class ParkSensorBroadcastReceiver extends BroadcastReceiver {
-    private View sensor1View;
-    private View sensor2View;
-    private View sensor3View;
-    private View sensor4View;
-    private Button[] sensor1Buttons = new Button[8];
-    private Button[] sensor2Buttons = new Button[8];
-    private Button[] sensor3Buttons = new Button[8];
-    private Button[] sensor4Buttons = new Button[8];
 
+    /*
+    Distance marks where new Bars get visible.
+    */
     private static int[] DISTANCE_MARKS_IN_CM = new int[] {30, 50, 80, 100, 150, 200, 250, 300};
+
     private static int MAX_NR_OF_BARS = 8;
 
-    public ParkSensorBroadcastReceiver(final View pSensor1View, final  View pSensor2View,
-                                       final  View pSensor3View, final View pSensor4View) {
-        this.sensor1View = pSensor1View;
-        this.sensor2View = pSensor2View;
-        this.sensor3View = pSensor3View;
-        this.sensor4View = pSensor4View;
+    private final Button[] sensor1Buttons = new Button[8];
+    private final Button[] sensor2Buttons = new Button[8];
+    private final Button[] sensor3Buttons = new Button[8];
+    private final Button[] sensor4Buttons = new Button[8];
+
+    public ParkSensorBroadcastReceiver(final View sensor1View, final  View sensor2View,
+                                       final  View sensor3View, final View sensor4View) {
         sensor1Buttons[0] = sensor1View.findViewById(R.id.button1_1);
         sensor1Buttons[1] = sensor1View.findViewById(R.id.button1_2);
         sensor1Buttons[2] = sensor1View.findViewById(R.id.button1_3);
@@ -61,12 +62,15 @@ public class ParkSensorBroadcastReceiver extends BroadcastReceiver {
     }
 
     private int cmToNrOfBars(int distanceInCm) {
+        if (distanceInCm == -1) {
+            return 0;
+        }
         for (int i = 0; i < DISTANCE_MARKS_IN_CM.length; i++ ) {
             if (distanceInCm <= DISTANCE_MARKS_IN_CM[i]) {
                 return ParkSensorBroadcastReceiver.MAX_NR_OF_BARS - i;
             }
         }
-        return 1; // show one bar
+        return 0; // default
     }
 
     @Override
@@ -76,11 +80,11 @@ public class ParkSensorBroadcastReceiver extends BroadcastReceiver {
         final int sensor3Cm = intent.getIntExtra(ParkSensorBackgroundService.PARK_SENSOR_3_KEY, -1);
         final int sensor4Cm = intent.getIntExtra(ParkSensorBackgroundService.PARK_SENSOR_4_KEY, -1);
 
-        Log.d("MainActivity - received:", "<----"
+        Log.d("onReceive", "<--\t"
                 + sensor1Cm + "\t"
                 + sensor2Cm + "\t"
                 + sensor3Cm + "\t"
-                + sensor4Cm + "\t"
+                + sensor4Cm
         );
 
         updateDisplay(sensor1Buttons, sensor1Cm);
@@ -93,7 +97,14 @@ public class ParkSensorBroadcastReceiver extends BroadcastReceiver {
         int nrOfBars = cmToNrOfBars(sensor1Cm);
         //Log.d("nr of bars " + nrOfBars,"nr of bars " + nrOfBars);
         viewButtons[0].setVisibility(View.VISIBLE); // first button always visible.
-        viewButtons[0].setText(sensor1Cm + " cm");
+        if (sensor1Cm == -1) {
+            viewButtons[0].setText("-------");
+            viewButtons[0].setBackgroundColor(Color.DKGRAY);
+        }else {
+            viewButtons[0].setBackgroundColor(Color.GREEN);
+            viewButtons[0].setText(sensor1Cm + " cm");
+        }
+
         for (int i = 1; i < viewButtons.length; i++) {
             viewButtons[i].setVisibility(nrOfBars <= i ? View.INVISIBLE : View.VISIBLE);
         }
