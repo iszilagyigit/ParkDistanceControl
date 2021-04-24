@@ -59,8 +59,6 @@ public class ParkSensorBackgroundService extends JobIntentService {
      */
     private native static int initSPIDevice();
 
-    private native static byte sendFirstByte(int pSpiFileHandler);
-
     /**
      * Send and receive 4 bytes to SPI device.
      * Sending bytes are not relevant for measurements, recieved bytes are
@@ -76,7 +74,6 @@ public class ParkSensorBackgroundService extends JobIntentService {
      */
     private native static long parkSensorSpi4Bytes(int pSpiFileHandler);
 
-    private native String stringFromJNI();
     /**
      * Convenience method for enqueuing work in to this service.
      */
@@ -87,14 +84,11 @@ public class ParkSensorBackgroundService extends JobIntentService {
         }
         if (spiFileHandler != -1) {
             Log.i("BackgroundService", "Initialized. " + spiFileHandler);
-            byte spiResponse = sendFirstByte(spiFileHandler);
-            Log.i("BackgroundService", String.format("Init byte response: 0x%x",spiResponse));
         }
     }
 
     @Override
     protected void onHandleWork(@NonNull Intent intent) {
-        Log.i("onHandleWork", "------> " + stringFromJNI());
         Log.i("onHandleWork", "------> SPI Handler: " + ParkSensorBackgroundService.spiFileHandler);
         Log.i("onHandleWork", "------> Executing work: " + intent);
 

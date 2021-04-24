@@ -88,21 +88,6 @@ Java_com_pdc_main_parkdistancecontrol2_ParkSensorBackgroundService_initSPIDevice
 }
 
 extern "C"
-JNIEXPORT jbyte JNICALL
-Java_com_pdc_main_parkdistancecontrol2_ParkSensorBackgroundService_sendFirstByte(
-        JNIEnv *env,
-        jobject /* this */,
-        jint fd) {
-
-       __android_log_print(ANDROID_LOG_INFO, "SPI", "spi dev handler param: %d\n", fd);
-
-       uint8_t anyValue = 0x02;
-       uint8_t recBuf = 0;
-       transfer(fd, &anyValue, reinterpret_cast<uint32_t *>(&recBuf), 1);
-       return recBuf;
-}
-
-extern "C"
 JNIEXPORT jlong JNICALL
 Java_com_pdc_main_parkdistancecontrol2_ParkSensorBackgroundService_parkSensorSpi4Bytes(
         JNIEnv *env,
@@ -118,11 +103,3 @@ Java_com_pdc_main_parkdistancecontrol2_ParkSensorBackgroundService_parkSensorSpi
     return recBuf;
 }
 
-extern "C"
-JNIEXPORT jstring JNICALL
-Java_com_pdc_main_parkdistancecontrol2_ParkSensorBackgroundService_stringFromJNI(
-        JNIEnv *env,
-        jobject /* this */) {
-    std::string hello = "Hello from Cplusplus";
-    return env->NewStringUTF(hello.c_str());
-}
