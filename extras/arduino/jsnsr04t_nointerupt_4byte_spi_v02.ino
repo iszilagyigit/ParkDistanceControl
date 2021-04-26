@@ -144,7 +144,7 @@ void checkSensors(byte sensorIndex, SoftwareSerial &sensor, byte vccPin) {
 byte measure(SoftwareSerial &sensor, byte vccPin) {
   digitalWrite(vccPin, HIGH);
   sensor.listen();
-  delay(30); // default 50
+  delay(10); // default 50
   do {
     count = 0;
     do {
