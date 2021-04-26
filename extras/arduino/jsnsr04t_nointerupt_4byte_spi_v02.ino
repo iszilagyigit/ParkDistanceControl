@@ -1,11 +1,11 @@
 /*
-  Blink + SPI recieve mit interrupt
+  Blink + SPI receive mit interrupt
 */
 
 #include <SPI.h>
 #include <SoftwareSerial.h>
 
-const int D2 = 2; // LED_Pin
+#define D2 2 // LED_Pin
 
 #define S1_TX_Pin 16
 #define S2_TX_Pin 16
@@ -32,7 +32,7 @@ SoftwareSerial sensor2(S2_RX_Pin, S2_TX_Pin);
 SoftwareSerial sensor3(S3_RX_Pin, S3_TX_Pin);
 SoftwareSerial sensor4(S4_RX_Pin, S4_TX_Pin);
 
-byte recBuf[4] = {0, 0, 0, 0}; // received byte values are not used 
+byte recBuf[4] = {0, 0, 0, 0}; // received byte values are not used
 
 // last measured values in cm (default werte falls sensor offline)
 byte lastMeasure[] = {0xFB, 0xFC, 0xFD, 0xFE};
@@ -81,42 +81,43 @@ void setup() {
   checkSensors(3, sensor4, S4_VCC_Pin);
   digitalWrite(D2, LOW);
 
-  for (byte i = 1; i<=5; i++) {
-    delay(50);
+  for (byte i = 1; i<=3; i++) {
+    delay(100);
     digitalWrite(D2, HIGH);
-    delay(50);
+    delay(100);
     digitalWrite(D2, LOW);
   }
-  
+
   // SPI INITIALISATION
   pinMode(MISO, OUTPUT);
 
   /* Enable SPI */
   SPCR = (1<<SPE);
   SPDR = HELLO_SPI_BYTE;
+
 }
 
 // the loop function runs over and over again forever
 void loop() {
-   digitalWrite(D2, HIGH);
-   if (sensorOnline[0]) {
+  digitalWrite(D2, HIGH);
+  if (sensorOnline[0]) {
     lastMeasure[0] = measure(sensor1, S1_VCC_Pin);
-   }
-   if (sensorOnline[1]) {
+  }
+  if (sensorOnline[1]) {
     lastMeasure[1] = measure(sensor2, S2_VCC_Pin);
-   }      
-   if (sensorOnline[2]) {
+  }
+  if (sensorOnline[2]) {
     lastMeasure[2] = measure(sensor3, S3_VCC_Pin);
-   }      
-   if (sensorOnline[3]) {
+  }
+  if (sensorOnline[3]) {
     lastMeasure[3] = measure(sensor4, S4_VCC_Pin);
-   }
-   digitalWrite(D2, LOW);
-   
-   noInterrupts();
-   spi4Bytes();
-   interrupts();   
- }
+  }
+  digitalWrite(D2, LOW);
+
+  noInterrupts();
+  spi4Bytes();
+  interrupts();
+}
 
 // check if the sensor is not returning a 0xFF within one second deactivate sensor
 void checkSensors(byte sensorIndex, SoftwareSerial &sensor, byte vccPin) {
@@ -142,17 +143,15 @@ void checkSensors(byte sensorIndex, SoftwareSerial &sensor, byte vccPin) {
 
 byte measure(SoftwareSerial &sensor, byte vccPin) {
   digitalWrite(vccPin, HIGH);
-
   sensor.listen();
-  // todo eventually 3 measurements with avg?
-  delay(50);
+  delay(30); // default 50
   do {
     count = 0;
     do {
       startByte = sensor.read();
       count++;
-    } while ( startByte != 0xFF && count <= 10);
-    if (count >= 10) {
+    } while ( startByte != 0xFF && count <= 5); // 5 vs 10
+    if (count >= 5) {
       digitalWrite(vccPin, LOW);
       return 1;
     }
@@ -179,15 +178,14 @@ byte measure(SoftwareSerial &sensor, byte vccPin) {
 }
 
 
- void spi4Bytes() { 
-   byte valFromSPIMaster = 0;
-   byte bCounter = 0;
-   /* Wait till a four byte EXCHANGE is done */
-   while (bCounter <= 3)  {
-     while(!(SPSR & (1<<SPIF)))
-     ;
-     recBuf[bCounter] = SPDR;
-     SPDR = lastMeasure[bCounter++];
-   }
- }
- 
+void spi4Bytes() {
+  byte valFromSPIMaster = 0;
+  byte bCounter = 0;
+  /* Wait till a four byte EXCHANGE is done */
+  while (bCounter <= 3)  {
+    while(!(SPSR & (1<<SPIF)))
+      ;
+    recBuf[bCounter] = SPDR;
+    SPDR = lastMeasure[bCounter++];
+  }
+}
