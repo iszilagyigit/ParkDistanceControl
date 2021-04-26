@@ -144,21 +144,18 @@ void checkSensors(byte sensorIndex, SoftwareSerial &sensor, byte vccPin) {
 byte measure(SoftwareSerial &sensor, byte vccPin) {
   digitalWrite(vccPin, HIGH);
   sensor.listen();
-  delay(10); // default 50
+  delay(10);
   do {
-    count = 0;
-    do {
-      startByte = sensor.read();
-      count++;
-    } while ( startByte != 0xFF && count <= 5); // 5 vs 10
-    if (count >= 5) {
-      digitalWrite(vccPin, LOW);
-      return 1;
-    }
     // wait till the next 3 bytes are available
-    while (sensor.available() < 3) {
+    while (sensor.available() <= 4) {
       // approx needed for the next 3 bytes
       // delayMicroseconds(10);
+    }
+
+    startByte = sensor.read();
+    if (startByte != 0xFF) {
+      while (sensor.overflow()) {}
+      continue;
     }
     mmHigh = sensor.read();
     mmLow = sensor.read();
