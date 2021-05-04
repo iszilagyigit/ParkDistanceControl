@@ -1,11 +1,16 @@
 package com.pdc.main.parkdistancecontrol2;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 /**
  * MainActivity for the Application.
@@ -16,6 +21,39 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        //getSupportActionBar().hide();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.mainmenu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                Log.i("menu", "Settings selected!!!");
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Loop Configuration").setMessage("Measure delay in " + ParkSensorBackgroundService.LOOP_DELAY_IN_MS + "ms");
+                builder.setPositiveButton("-100 ms", (dialog, which) -> {
+                    Log.i("menu", "-100ms");
+                    ParkSensorBackgroundService.LOOP_DELAY_IN_MS -= 100;
+                });
+                builder.setNeutralButton("+100 ms", (dialog, which) -> {
+                    Log.i("menu", "+100ms");
+                    ParkSensorBackgroundService.LOOP_DELAY_IN_MS += 100;
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override

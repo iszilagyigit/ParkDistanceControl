@@ -24,8 +24,9 @@ public class ParkSensorBackgroundService extends JobIntentService {
     /*
     Communication mit Arduino, loop delay count.
     It gives time to sensors for new measurement.
+     Min Working 700
      */
-    public static final int LOOP_DELAY_IN_MS = 700;
+    public static int LOOP_DELAY_IN_MS = 1000;
 
     /*
     Nr Of measurements which this JobIntentService will do.
