@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
                         final Slider slider = view.findViewById(R.id.time_slider_slider);
                         final float sliderValue = slider.getValue();
                         //do something with value
-                        // ParkSensorBackgroundService.LOOP_DELAY_IN_MS += sliderValue;
+                        ParkSensorBackgroundService.LOOP_DELAY_IN_MS = (int) sliderValue;
                     });
                     Button cancel = dialog.findViewById(R.id.time_slider_cancel);
                     cancel.setOnClickListener(view -> dialog.dismiss());

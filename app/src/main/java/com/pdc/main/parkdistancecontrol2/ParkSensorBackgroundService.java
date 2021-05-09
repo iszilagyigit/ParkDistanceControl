@@ -26,7 +26,7 @@ public class ParkSensorBackgroundService extends JobIntentService {
     It gives time to sensors for new measurement.
      Min Working 700
      */
-    public static int LOOP_DELAY_IN_MS = 1000;
+    public static int LOOP_DELAY_IN_MS = 500;
 
     /*
     Nr Of measurements which this JobIntentService will do.
