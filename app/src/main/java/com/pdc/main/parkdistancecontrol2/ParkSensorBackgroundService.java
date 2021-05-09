@@ -58,7 +58,7 @@ public class ParkSensorBackgroundService extends JobIntentService {
      *
      * @return Linux SPI device file handler or -1 in case of an error.
      */
-    private native static int initSPIDevice();
+    private static native int initSPIDevice();
 
     /**
      * Send and receive 4 bytes to SPI device.
@@ -73,7 +73,7 @@ public class ParkSensorBackgroundService extends JobIntentService {
      * @param pSpiFileHandler Linux file handler
      * @return the received 4 bytes.
      */
-    private native static long parkSensorSpi4Bytes(int pSpiFileHandler);
+    private static native long parkSensorSpi4Bytes(int pSpiFileHandler);
 
     /**
      * Convenience method for enqueuing work in to this service.

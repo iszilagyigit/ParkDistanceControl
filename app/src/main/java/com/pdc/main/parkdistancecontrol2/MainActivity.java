@@ -1,5 +1,7 @@
 package com.pdc.main.parkdistancecontrol2;
 
+import android.app.Dialog;
+import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -11,11 +13,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import com.google.android.material.slider.Slider;
 
 /**
  * MainActivity for the Application.
  */
 public class MainActivity extends AppCompatActivity {
+
+    // try it an delete it
+    private final boolean alternative = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,18 +44,37 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_settings:
                 Log.i("menu", "Settings selected!!!");
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Loop Configuration").setMessage("Measure delay in " + ParkSensorBackgroundService.LOOP_DELAY_IN_MS + "ms");
-                builder.setPositiveButton("-100 ms", (dialog, which) -> {
-                    Log.i("menu", "-100ms");
-                    ParkSensorBackgroundService.LOOP_DELAY_IN_MS -= 100;
-                });
-                builder.setNeutralButton("+100 ms", (dialog, which) -> {
-                    Log.i("menu", "+100ms");
-                    ParkSensorBackgroundService.LOOP_DELAY_IN_MS += 100;
-                });
-                AlertDialog dialog = builder.create();
-                dialog.show();
+
+                if(alternative) {
+                    Dialog dialog = new Dialog(getApplicationContext());
+                    dialog.setTitle(R.string.time_slider_dialog_title);
+                    dialog.setContentView(R.layout.time_slider_dialog);
+
+                    final Button ok = dialog.findViewById(R.id.time_slider_ok);
+                    ok.setOnClickListener(view -> {
+                        final Slider slider = view.findViewById(R.id.time_slider_slider);
+                        final float sliderValue = slider.getValue();
+                        //do something with value
+                        // ParkSensorBackgroundService.LOOP_DELAY_IN_MS += sliderValue;
+                    });
+                    Button cancel = dialog.findViewById(R.id.time_slider_cancel);
+                    cancel.setOnClickListener(view -> dialog.dismiss());
+                    dialog.show();
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("Loop Configuration").setMessage(
+                        "Measure delay in " + ParkSensorBackgroundService.LOOP_DELAY_IN_MS + "ms");
+                    builder.setPositiveButton("-100 ms", (dialog, which) -> {
+                        Log.i("menu", "-100ms");
+                        ParkSensorBackgroundService.LOOP_DELAY_IN_MS -= 100;
+                    });
+                    builder.setNeutralButton("+100 ms", (dialog, which) -> {
+                        Log.i("menu", "+100ms");
+                        ParkSensorBackgroundService.LOOP_DELAY_IN_MS += 100;
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

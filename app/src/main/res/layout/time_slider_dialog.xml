@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical">
+  <TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textAlignment="center"
+    android:textSize="20sp"
+    android:text="@string/time_slider_dialog_message"/>
+  <com.google.android.material.slider.Slider
+    android:id="@+id/time_slider_slider"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:stepSize="50.0"
+    android:valueFrom="100.0"
+    android:valueTo="1500.0" />
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="end">
+    <Button
+      android:id="@+id/time_slider_ok"
+      android:layout_width="150dp"
+      android:layout_height="wrap_content"
+      android:text="@string/cancel"
+      style="?android:attr/buttonBarButtonStyle" />
+    <Button
+      android:id="@+id/time_slider_cancel"
+      android:layout_width="150dp"
+      android:layout_height="wrap_content"
+      android:text="@string/ok"
+      style="?android:attr/buttonBarButtonStyle" />
+  </LinearLayout>
+</LinearLayout>
