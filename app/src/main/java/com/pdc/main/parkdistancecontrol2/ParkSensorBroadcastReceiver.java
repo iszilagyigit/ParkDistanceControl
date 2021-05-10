@@ -87,13 +87,31 @@ public class ParkSensorBroadcastReceiver extends BroadcastReceiver {
                 + sensor4Cm
         );
 
-        updateDisplay(sensor1Buttons, sensor1Cm);
-        updateDisplay(sensor2Buttons, sensor2Cm);
-        updateDisplay(sensor3Buttons, sensor3Cm);
-        updateDisplay(sensor4Buttons, sensor4Cm);
+        int maxOfVisibleBars = 0;
+        int nrOfBars;
+        nrOfBars = updateDisplay(sensor1Buttons, sensor1Cm);
+        if (nrOfBars > maxOfVisibleBars) {
+            maxOfVisibleBars = nrOfBars;
+        }
+        nrOfBars = updateDisplay(sensor2Buttons, sensor2Cm);
+        if (nrOfBars > maxOfVisibleBars) {
+            maxOfVisibleBars = nrOfBars;
+        }
+        nrOfBars = updateDisplay(sensor3Buttons, sensor3Cm);
+        if (nrOfBars > maxOfVisibleBars) {
+            maxOfVisibleBars = nrOfBars;
+        }
+        nrOfBars = updateDisplay(sensor4Buttons, sensor4Cm);
+        if (nrOfBars > maxOfVisibleBars) {
+            maxOfVisibleBars = nrOfBars;
+        }
+
+        if (maxOfVisibleBars >= 8) {
+            Log.i("onReceive", "--> play some 'beep' sound for 1 sec, max volume");
+        }
     }
 
-    private void updateDisplay(final Button[] viewButtons, int sensor1Cm) {
+    private int updateDisplay(final Button[] viewButtons, int sensor1Cm) {
         int nrOfBars = cmToNrOfBars(sensor1Cm);
         //Log.d("nr of bars " + nrOfBars,"nr of bars " + nrOfBars);
         viewButtons[0].setVisibility(View.VISIBLE); // first button always visible.
@@ -108,5 +126,6 @@ public class ParkSensorBroadcastReceiver extends BroadcastReceiver {
         for (int i = 1; i < viewButtons.length; i++) {
             viewButtons[i].setVisibility(nrOfBars <= i ? View.INVISIBLE : View.VISIBLE);
         }
+        return nrOfBars;
       }
 }
