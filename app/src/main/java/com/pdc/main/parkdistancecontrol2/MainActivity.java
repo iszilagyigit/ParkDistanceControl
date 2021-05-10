@@ -21,13 +21,13 @@ import com.google.android.material.slider.Slider;
 public class MainActivity extends AppCompatActivity {
 
     // try it an delete it
-    private final boolean alternative = false;
+    private final boolean alternative = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        Toolbar myToolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         //getSupportActionBar().hide();
     }
@@ -46,14 +46,16 @@ public class MainActivity extends AppCompatActivity {
                 Log.i("menu", "Settings selected!!!");
 
                 if(alternative) {
-                    Dialog dialog = new Dialog(getApplicationContext());
+                    Dialog dialog = new Dialog(this);
                     dialog.setTitle(R.string.time_slider_dialog_title);
                     dialog.setContentView(R.layout.time_slider_dialog);
+                    final Slider slider = dialog.findViewById(R.id.time_slider_slider);
+                    slider.setValue(ParkSensorBackgroundService.LOOP_DELAY_IN_MS);
 
                     final Button ok = dialog.findViewById(R.id.time_slider_ok);
                     ok.setOnClickListener(view -> {
-                        final Slider slider = view.findViewById(R.id.time_slider_slider);
-                        final float sliderValue = slider.getValue();
+                        final Slider slide = view.findViewById(R.id.time_slider_slider);
+                        final float sliderValue = slide.getValue();
                         //do something with value
                         ParkSensorBackgroundService.LOOP_DELAY_IN_MS = (int) sliderValue;
                     });
