@@ -94,32 +94,30 @@ public class ParkSensorBroadcastReceiver extends BroadcastReceiver {
         nrOfBars = updateDisplay(sensor1Buttons, sensor1Cm);
         if (nrOfBars > maxOfVisibleBars) {
             maxOfVisibleBars = nrOfBars;
-            playSound();
         }
         nrOfBars = updateDisplay(sensor2Buttons, sensor2Cm);
         if (nrOfBars > maxOfVisibleBars) {
             maxOfVisibleBars = nrOfBars;
-            playSound();
         }
         nrOfBars = updateDisplay(sensor3Buttons, sensor3Cm);
         if (nrOfBars > maxOfVisibleBars) {
             maxOfVisibleBars = nrOfBars;
-            playSound();
         }
         nrOfBars = updateDisplay(sensor4Buttons, sensor4Cm);
         if (nrOfBars > maxOfVisibleBars) {
             maxOfVisibleBars = nrOfBars;
-            playSound();
         }
 
         if (maxOfVisibleBars >= 8) {
             Log.i("onReceive", "--> play some 'beep' sound for 1 sec, max volume");
+            playSound();
         }
     }
 
     private void playSound() {
-        ToneGenerator toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
-        toneGen1.startTone(ToneGenerator.TONE_CDMA_PIP,150);
+        ToneGenerator generator = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
+        generator.startTone(ToneGenerator.TONE_CDMA_PIP, 1000);
+        generator.release();
     }
 
     private int updateDisplay(final Button[] viewButtons, int sensor1Cm) {
