@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -92,23 +94,32 @@ public class ParkSensorBroadcastReceiver extends BroadcastReceiver {
         nrOfBars = updateDisplay(sensor1Buttons, sensor1Cm);
         if (nrOfBars > maxOfVisibleBars) {
             maxOfVisibleBars = nrOfBars;
+            playSound();
         }
         nrOfBars = updateDisplay(sensor2Buttons, sensor2Cm);
         if (nrOfBars > maxOfVisibleBars) {
             maxOfVisibleBars = nrOfBars;
+            playSound();
         }
         nrOfBars = updateDisplay(sensor3Buttons, sensor3Cm);
         if (nrOfBars > maxOfVisibleBars) {
             maxOfVisibleBars = nrOfBars;
+            playSound();
         }
         nrOfBars = updateDisplay(sensor4Buttons, sensor4Cm);
         if (nrOfBars > maxOfVisibleBars) {
             maxOfVisibleBars = nrOfBars;
+            playSound();
         }
 
         if (maxOfVisibleBars >= 8) {
             Log.i("onReceive", "--> play some 'beep' sound for 1 sec, max volume");
         }
+    }
+
+    private void playSound() {
+        ToneGenerator toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
+        toneGen1.startTone(ToneGenerator.TONE_CDMA_PIP,150);
     }
 
     private int updateDisplay(final Button[] viewButtons, int sensor1Cm) {
