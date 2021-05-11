@@ -1,6 +1,7 @@
 package com.pdc.main.parkdistancecontrol2;
 
 import android.app.Dialog;
+import android.view.View;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -51,10 +52,12 @@ public class MainActivity extends AppCompatActivity {
                     Dialog dialog = new Dialog(this);
                     dialog.setTitle(R.string.time_slider_dialog_title);
                     dialog.setContentView(R.layout.time_slider_dialog);
+
                     final Slider slider = dialog.findViewById(R.id.time_slider_slider);
                     slider.setValue(ParkSensorBackgroundService.LOOP_DELAY_IN_MS);
-                    ((TextView)dialog.findViewById(R.id.sliderTextId))
-                            .setText(String.format(getString(R.string.time_slider_dialog_message), ParkSensorBackgroundService.LOOP_DELAY_IN_MS));
+
+                    final TextView header = dialog.findViewById(R.id.time_slider_header);
+                    header.setText(String.format(getString(R.string.time_slider_dialog_message), ParkSensorBackgroundService.LOOP_DELAY_IN_MS));
 
                     final Button ok = dialog.findViewById(R.id.time_slider_ok);
                     ok.setOnClickListener(view -> {
@@ -63,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
                         ParkSensorBackgroundService.LOOP_DELAY_IN_MS = (int) sliderValue;
                         dialog.dismiss();
                     });
+
                     Button cancel = dialog.findViewById(R.id.time_slider_cancel);
                     cancel.setOnClickListener(view -> dialog.dismiss());
                     dialog.show();
