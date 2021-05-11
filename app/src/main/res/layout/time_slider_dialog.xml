@@ -3,12 +3,14 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:orientation="vertical">
+
   <TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:textAlignment="center"
-    android:textSize="20sp"
-    android:text="@string/time_slider_dialog_message"/>
+      android:id="@+id/sliderTextId"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/time_slider_dialog_message"
+      android:textAlignment="center"
+      android:textSize="20sp" />
   <com.google.android.material.slider.Slider
     android:id="@+id/time_slider_slider"
     android:layout_width="match_parent"

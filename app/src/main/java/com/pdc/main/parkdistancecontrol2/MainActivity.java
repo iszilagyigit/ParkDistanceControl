@@ -13,6 +13,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
 import com.google.android.material.slider.Slider;
 
 /**
@@ -51,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
                     dialog.setContentView(R.layout.time_slider_dialog);
                     final Slider slider = dialog.findViewById(R.id.time_slider_slider);
                     slider.setValue(ParkSensorBackgroundService.LOOP_DELAY_IN_MS);
+                    ((TextView)dialog.findViewById(R.id.sliderTextId))
+                            .setText(String.format(getString(R.string.time_slider_dialog_message), ParkSensorBackgroundService.LOOP_DELAY_IN_MS));
 
                     final Button ok = dialog.findViewById(R.id.time_slider_ok);
                     ok.setOnClickListener(view -> {

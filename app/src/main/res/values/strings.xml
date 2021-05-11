@@ -2,7 +2,7 @@
     <string name="app_name">ParkDistanceControl2</string>
     <string name="action_delayconfig">[Delays]</string>
     <string name="time_slider_dialog_title">Loop Configuration</string>
-    <string name="time_slider_dialog_message">Measure delay in 50 ms steps.</string>
+    <string name="time_slider_dialog_message">Delay in 50 ms steps. (%d ms)</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
 </resources>
