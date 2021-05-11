@@ -58,11 +58,10 @@ public class MainActivity extends AppCompatActivity {
 
                     final Button ok = dialog.findViewById(R.id.time_slider_ok);
                     ok.setOnClickListener(view -> {
-                        final Slider slide = view.findViewById(R.id.time_slider_slider);
-                        final float sliderValue = slide.getValue();
-                        //do something with value
+                        final float sliderValue = slider.getValue();
                         Log.i("newvalue:", String.valueOf(sliderValue));
                         ParkSensorBackgroundService.LOOP_DELAY_IN_MS = (int) sliderValue;
+                        dialog.dismiss();
                     });
                     Button cancel = dialog.findViewById(R.id.time_slider_cancel);
                     cancel.setOnClickListener(view -> dialog.dismiss());
