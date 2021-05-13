@@ -15,9 +15,10 @@ import android.widget.Button;
  */
 public class ParkSensorBroadcastReceiver extends BroadcastReceiver {
 
+    public static final int NOVAL_FROM_SENSOR = -1;
     /*
-    Distance marks where new Bars get visible.
-    */
+                Distance marks where new Bars get visible.
+     */
     private static int[] DISTANCE_MARKS_IN_CM = new int[] {30, 50, 80, 100, 150, 200, 250, 300};
 
     private static int MAX_NR_OF_BARS = 8;
@@ -64,7 +65,7 @@ public class ParkSensorBroadcastReceiver extends BroadcastReceiver {
     }
 
     private int cmToNrOfBars(int distanceInCm) {
-        if (distanceInCm == -1) {
+        if (distanceInCm == NOVAL_FROM_SENSOR) {
             return 0;
         }
         for (int i = 0; i < DISTANCE_MARKS_IN_CM.length; i++ ) {
@@ -77,10 +78,10 @@ public class ParkSensorBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        final int sensor1Cm = intent.getIntExtra(ParkSensorBackgroundService.PARK_SENSOR_1_KEY, -1);
-        final int sensor2Cm = intent.getIntExtra(ParkSensorBackgroundService.PARK_SENSOR_2_KEY, -1);
-        final int sensor3Cm = intent.getIntExtra(ParkSensorBackgroundService.PARK_SENSOR_3_KEY, -1);
-        final int sensor4Cm = intent.getIntExtra(ParkSensorBackgroundService.PARK_SENSOR_4_KEY, -1);
+        final int sensor1Cm = intent.getIntExtra(ParkSensorBackgroundService.PARK_SENSOR_1_KEY, NOVAL_FROM_SENSOR);
+        final int sensor2Cm = intent.getIntExtra(ParkSensorBackgroundService.PARK_SENSOR_2_KEY, NOVAL_FROM_SENSOR);
+        final int sensor3Cm = intent.getIntExtra(ParkSensorBackgroundService.PARK_SENSOR_3_KEY, NOVAL_FROM_SENSOR);
+        final int sensor4Cm = intent.getIntExtra(ParkSensorBackgroundService.PARK_SENSOR_4_KEY, NOVAL_FROM_SENSOR);
 
         Log.d("onReceive", "<--\t"
                 + sensor1Cm + "\t"
@@ -90,23 +91,17 @@ public class ParkSensorBroadcastReceiver extends BroadcastReceiver {
         );
 
         int maxOfVisibleBars = 0;
-        int nrOfBars;
-        nrOfBars = updateDisplay(sensor1Buttons, sensor1Cm);
-        if (nrOfBars > maxOfVisibleBars) {
-            maxOfVisibleBars = nrOfBars;
-        }
+        int nrOfBars = updateDisplay(sensor1Buttons, sensor1Cm);
+        maxOfVisibleBars = Math.max(nrOfBars, maxOfVisibleBars);
+
         nrOfBars = updateDisplay(sensor2Buttons, sensor2Cm);
-        if (nrOfBars > maxOfVisibleBars) {
-            maxOfVisibleBars = nrOfBars;
-        }
+        maxOfVisibleBars = Math.max(nrOfBars, maxOfVisibleBars);
+
         nrOfBars = updateDisplay(sensor3Buttons, sensor3Cm);
-        if (nrOfBars > maxOfVisibleBars) {
-            maxOfVisibleBars = nrOfBars;
-        }
+        maxOfVisibleBars = Math.max(nrOfBars, maxOfVisibleBars);
+
         nrOfBars = updateDisplay(sensor4Buttons, sensor4Cm);
-        if (nrOfBars > maxOfVisibleBars) {
-            maxOfVisibleBars = nrOfBars;
-        }
+        maxOfVisibleBars = Math.max(nrOfBars, maxOfVisibleBars);
 
         if (maxOfVisibleBars >= 8) {
             Log.i("onReceive", "--> play some 'beep' sound for 1 sec, max volume");
@@ -116,15 +111,17 @@ public class ParkSensorBroadcastReceiver extends BroadcastReceiver {
 
     private void playSound() {
         ToneGenerator generator = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
-        generator.startTone(ToneGenerator.TONE_CDMA_PIP, 1000);
+        generator.startTone(ToneGenerator.TONE_CDMA_PIP, 500);
         generator.release();
     }
 
     private int updateDisplay(final Button[] viewButtons, int sensor1Cm) {
+
+        viewButtons[0].setVisibility(View.VISIBLE); // first button always visible.
         int nrOfBars = cmToNrOfBars(sensor1Cm);
         //Log.d("nr of bars " + nrOfBars,"nr of bars " + nrOfBars);
-        viewButtons[0].setVisibility(View.VISIBLE); // first button always visible.
-        if (sensor1Cm == -1) {
+
+        if (sensor1Cm == NOVAL_FROM_SENSOR) {
             viewButtons[0].setText("-------");
             viewButtons[0].setBackgroundColor(Color.DKGRAY);
         }else {

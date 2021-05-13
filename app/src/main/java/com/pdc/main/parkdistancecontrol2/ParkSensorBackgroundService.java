@@ -17,14 +17,19 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
  */
 public class ParkSensorBackgroundService extends JobIntentService {
     /*
-    Unique ID for this JobIntentService.
-     */
+         Unique ID for this JobIntentService.
+    */
     private static final int JOB_ID = 1000;
+
+    /*
+     * Min in Cm what a JSN-SRN04T v2.0 sensor can measure.
+     */
+    public static final int SENSOR_MIN_CM = 20;
 
     /*
     Communication mit Arduino, loop delay count.
     It gives time to sensors for new measurement.
-     Min Working 700
+     Min Working 700 (configurable with the GUI - time_slider_dialog)
      */
     public static int LOOP_DELAY_IN_MS = 1000;
 
@@ -106,16 +111,16 @@ public class ParkSensorBackgroundService extends JobIntentService {
                     int sensor3 = (int) ((valueFromSensor & 0x0000FF00) >>> 8);
                     int sensor4 = (int) (valueFromSensor  & 0x000000FF);
                     Log.i("onHandleWork", String.format("Sensors: 0x%x 0x%x 0x%x 0x%x ", sensor1, sensor2, sensor3, sensor4));
-                    if (sensor1 != 0xFB) {
+                    if (sensor1 != 0xFB && sensor1 > SENSOR_MIN_CM) {
                         measureIntent.putExtra(PARK_SENSOR_1_KEY, sensor1);
                     }
-                    if (sensor2 != 0xFC) {
+                    if (sensor2 != 0xFC && sensor2 > SENSOR_MIN_CM) {
                         measureIntent.putExtra(PARK_SENSOR_2_KEY, sensor2);
                     }
-                    if (sensor3 != 0xFD) {
+                    if (sensor3 != 0xFD && sensor3 > SENSOR_MIN_CM) {
                         measureIntent.putExtra(PARK_SENSOR_3_KEY, sensor3);
                     }
-                    if (sensor4 != 0xFE) {
+                    if (sensor4 != 0xFE && sensor4 > SENSOR_MIN_CM) {
                         measureIntent.putExtra(PARK_SENSOR_4_KEY, sensor4);
                     }
                 }else {
