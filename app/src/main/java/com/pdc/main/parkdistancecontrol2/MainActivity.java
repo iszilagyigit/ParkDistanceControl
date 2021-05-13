@@ -23,9 +23,6 @@ import com.google.android.material.slider.Slider;
  */
 public class MainActivity extends AppCompatActivity {
 
-    // try it an delete it
-    private final boolean alternative = true;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,49 +43,41 @@ public class MainActivity extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.action_settings:
-                Log.i("menu", "Settings selected!!!");
-
-                if(alternative) {
-                    Dialog dialog = new Dialog(this);
-                    dialog.setTitle(R.string.time_slider_dialog_title);
-                    dialog.setContentView(R.layout.time_slider_dialog);
-
-                    final Slider slider = dialog.findViewById(R.id.time_slider_slider);
-                    slider.setValue(ParkSensorBackgroundService.LOOP_DELAY_IN_MS);
-
-                    final TextView header = dialog.findViewById(R.id.time_slider_header);
-                    header.setText(String.format(getString(R.string.time_slider_dialog_message), ParkSensorBackgroundService.LOOP_DELAY_IN_MS));
-
-                    final Button ok = dialog.findViewById(R.id.time_slider_ok);
-                    ok.setOnClickListener(view -> {
-                        final float sliderValue = slider.getValue();
-                        Log.i("newvalue:", String.valueOf(sliderValue));
-                        ParkSensorBackgroundService.LOOP_DELAY_IN_MS = (int) sliderValue;
-                        dialog.dismiss();
-                    });
-
-                    Button cancel = dialog.findViewById(R.id.time_slider_cancel);
-                    cancel.setOnClickListener(view -> dialog.dismiss());
-                    dialog.show();
-                } else {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setTitle("Loop Configuration").setMessage(
-                        "Measure delay in " + ParkSensorBackgroundService.LOOP_DELAY_IN_MS + "ms");
-                    builder.setPositiveButton("-100 ms", (dialog, which) -> {
-                        Log.i("menu", "-100ms");
-                        ParkSensorBackgroundService.LOOP_DELAY_IN_MS -= 100;
-                    });
-                    builder.setNeutralButton("+100 ms", (dialog, which) -> {
-                        Log.i("menu", "+100ms");
-                        ParkSensorBackgroundService.LOOP_DELAY_IN_MS += 100;
-                    });
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                }
+                configureLoopDelay();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    /**
+     * Loop delay configuration used to syncr. the communication with sensors.<br>
+     * The lowest working value should be chosen.
+     */
+    private void configureLoopDelay() {
+        Log.i("menu", "Settings selected!!!");
+
+        Dialog dialog = new Dialog(this);
+        dialog.setTitle(R.string.time_slider_dialog_title);
+        dialog.setContentView(R.layout.time_slider_dialog);
+
+        final Slider slider = dialog.findViewById(R.id.time_slider_slider);
+        slider.setValue(ParkSensorBackgroundService.LOOP_DELAY_IN_MS);
+
+        final TextView header = dialog.findViewById(R.id.time_slider_header);
+        header.setText(String.format(getString(R.string.time_slider_dialog_message), ParkSensorBackgroundService.LOOP_DELAY_IN_MS));
+
+        final Button ok = dialog.findViewById(R.id.time_slider_ok);
+        ok.setOnClickListener(view -> {
+            final float sliderValue = slider.getValue();
+            Log.i("newvalue:", String.valueOf(sliderValue));
+            ParkSensorBackgroundService.LOOP_DELAY_IN_MS = (int) sliderValue;
+            dialog.dismiss();
+        });
+
+        Button cancel = dialog.findViewById(R.id.time_slider_cancel);
+        cancel.setOnClickListener(view -> dialog.dismiss());
+        dialog.show();
     }
 
     @Override
