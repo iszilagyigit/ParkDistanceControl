@@ -15,7 +15,7 @@ static const char *device = "/dev/spidev0.0";
 static uint32_t speed = 500000;
 static uint32_t mode;
 
-static void transfer(int fd, uint8_t const *tx, uint32_t *rx, size_t len)
+static void transfer(int fd, uint32_t const *tx, uint32_t *rx, size_t len)
 {
     int ret;
     struct spi_ioc_transfer tr = {
@@ -98,8 +98,7 @@ Java_com_pdc_main_parkdistancecontrol2_ParkSensorBackgroundService_parkSensorSpi
 
     uint32_t anyValue = 0x01020304;
     uint32_t recBuf = 0x00000000;
-    transfer(fd, reinterpret_cast<const uint8_t *>(&anyValue),
-             (uint32_t *) reinterpret_cast<const uint8_t *> (&recBuf), 4);
+    transfer(fd, &anyValue, &recBuf, 4);
     return recBuf;
 }
 
